@@ -1,0 +1,59 @@
+# Compilação
+*.class
+bin/
+
+# Logs
+*.log
+
+# Configurações de diretório
+.DS_Store
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+target/
+
+# Arquivos gerados pelo sistema operacional
+Thumbs.db
+*.DS_Store
+
+# Compilação em Maven
+target/
+
+# Compilação em Gradle
+build/
+.gradle/
+
+# Arquivos do IntelliJ IDEA
+*.iml
+.idea/
+
+# Arquivos Eclipse
+.classpath
+.project
+.settings/
+
+# Arquivos temporários
+*.tmp
+*.bak
+*.swp
+*~.nib
+
+# Arquivos do NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Arquivos de pacotes
+*.jar
+*.war
+*.ear
+
+# Arquivos de dependências
+lib/
