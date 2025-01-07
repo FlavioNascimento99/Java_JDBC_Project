@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import database.Database;
 import database.DatabaseException;
@@ -49,7 +52,7 @@ public class SellerDaoJDBC implements SellerDao {
 					"SELECT seller.*, department.Name as DepName "
 					+ "FROM seller INNER JOIN department "
 					+ "ON seller.DepartmentId = department.Id "
-					+ "WHERE seller.Id = ?");
+					+ "WHERE seller.Id = ? ");
 			
 			prepState.setInt(1, id);
 			
@@ -81,6 +84,70 @@ public class SellerDaoJDBC implements SellerDao {
 
 		}
 	}
+	
+	public List<Seller> findByDepartment(Department departmentParameteer) {
+		
+		// Inicialização da consulta e da coleta de resultados da mesma (preparedStatement e resultSet)
+		PreparedStatement preparedState = null;
+		ResultSet resultSet = null;
+		
+		try {
+			/*
+			 * Com connection devidamente instanciado, podemos chamar seus métodos estáticos
+			 * neste caso, fazemos isso dentro da variável "preparedState" com o connection.prepareStatement
+			 * que possui uma String com o script SQL que desejamos para o método em questão.
+			 * 
+			 * */
+			preparedState = connection.prepareStatement(""
+					+ "SELECT seller.*, department.Name as DepName "
+					+ "FROM seller INNER JOIN department "
+					+ "ON seller.DepartmentId = department.Id "
+					+ "WHERE DepartmentId = ? "
+					+ "ORDER BY Name");
+			
+			// setInt é um método de PreparedStatement que tem como parâmetros (index, valor a ser atribuído dentro da Query)
+			preparedState.setInt(1, departmentParameteer.getId());
+			
+			/*
+			 * Passamos o preparedState com método para finalmente executar query para a variável do tipo 
+			 * ResultSet que tem como dever, trazer os resultados da consulta.
+			 */
+			resultSet = preparedState.executeQuery();
+			
+			List<Seller> sellerByDepartment = new ArrayList<>();
+			Map<Integer, Department> departmentMapper = new HashMap<>();
+			
+			
+			while(resultSet.next()) {
+				
+				// departmentIdChecker retorna Null quando o retorno não existe, nesse caso, 
+				Department department = departmentMapper.get(resultSet.getInt("DepartmentId"));
+				
+				if (department == null) {					
+					department = instantiateDepartment(resultSet);
+					departmentMapper.put(resultSet.getInt("DepartmentId"), department);
+				}
+				
+				Seller sellerInstance = instantiateSeller(resultSet, department);
+				
+				sellerByDepartment.add(sellerInstance);
+				
+			}
+			
+			return sellerByDepartment;
+			
+		} catch (SQLException e) {
+			
+			throw new DatabaseException(e.getMessage());
+			
+		} finally {
+
+			Database.closeStatement(preparedState);
+			Database.closeResultSet(resultSet);			
+			
+		}
+		
+	}
 
 	private Seller instantiateSeller(ResultSet resultSet, Department department) throws SQLException {
 		
@@ -108,6 +175,8 @@ public class SellerDaoJDBC implements SellerDao {
 		
 	}
 
+	
+	
 	@Override
 	public List<Seller> findAll() {
 		// TODO Auto-generated method stub
