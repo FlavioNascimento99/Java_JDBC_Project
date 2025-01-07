@@ -10,8 +10,9 @@ public class Program {
 
 		SellerDao sellD = DaoFactory.createSellerDao();
 		
-		Seller seller = sellD.findById(7);
 		
+		System.out.print("==== Teste I - FindById ====");
+		Seller seller = sellD.findById(7);
 		System.out.println(seller);
 	}
 
