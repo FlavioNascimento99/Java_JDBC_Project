@@ -26,6 +26,13 @@ public class Program {
 		for (Seller obj : resultSellerByDepartment) {
 			System.out.println("\n" + obj);
 		}
+		
+		
+		System.out.print("\n===== Teste III - FindAll ======");
+		List<Seller> resultSellerAll = sellerDaoInstance.findAll();
+		for (Seller obj : resultSellerAll) {
+			System.out.println("\n" + obj);
+		}
 	}
 
 }
