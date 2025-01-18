@@ -16,6 +16,13 @@ import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 
+
+
+ /*
+ *	Classe responsável por carregar as regras de negócio.
+ *	Métodos trabalham em conjunto com biblioteca Java Conectivity Database
+ *	em conjunto com QUERY's que irão acessar o Banco de Dados.
+ */
 public class SellerDaoJDBC implements SellerDao {
 	
 	Connection connection;
@@ -24,10 +31,17 @@ public class SellerDaoJDBC implements SellerDao {
 		this.connection = connection;
 	}
 
+	// Método de inserção
 	@Override
 	public void insert(Seller obj) {
+		
+		// Instanciação do PreparedStatement para passar query's complexas.
 		PreparedStatement preparedStatement = null;
+		
+		// Instanciação de ResultSet para armazenamento em tempo de execução das respostas capturadas do Banco.
 		ResultSet resultSet = null;
+		
+		
 		
 		try {
 			
